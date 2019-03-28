@@ -1,9 +1,0 @@
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\bin\Debug\netstandard2.0\TemplateParser.TokenDataFlow.deps.json
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\bin\Debug\netstandard2.0\TemplateParser.TokenDataFlow.dll
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\bin\Debug\netstandard2.0\TemplateParser.TokenDataFlow.pdb
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\obj\Debug\netstandard2.0\TemplateParser.TokenDataFlow.csprojAssemblyReference.cache
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\obj\Debug\netstandard2.0\TemplateParser.TokenDataFlow.csproj.CoreCompileInputs.cache
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\obj\Debug\netstandard2.0\TemplateParser.TokenDataFlow.AssemblyInfoInputs.cache
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\obj\Debug\netstandard2.0\TemplateParser.TokenDataFlow.AssemblyInfo.cs
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\obj\Debug\netstandard2.0\TemplateParser.TokenDataFlow.dll
-D:\0_Job_tasks\TemplateParser.TokenDataFlow\obj\Debug\netstandard2.0\TemplateParser.TokenDataFlow.pdb
