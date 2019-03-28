@@ -138,11 +138,15 @@ namespace TemplateParser
                 {
                     case TokenType.Token:
                         string value;
+
+                        //Here the token flow is like{...,[Creationtime],",[Formating string],...}
+                        //Hence the position of label is current position minus 2
                         if (index < this._tokens.Count - 2)
                         {
                             var nextToken = this._tokens[index + 2];
                             if (nextToken.Kind == TokenType.FormatString)
                             {
+                                //Use IFormattable to identify the tokenis formattable
                                 var obj = this._variables[token.Text] as IFormattable;
                                 value = obj == null ? this._variables[token.Text].ToString() : obj.ToString(nextToken.Text, null);
 
