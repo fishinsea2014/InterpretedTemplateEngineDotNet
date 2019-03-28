@@ -17,16 +17,22 @@ namespace TemplateParser.Test {
             //test.Test_no_property_substitute();
             //test.Test_formatted_date_property_substitute();
             //test.Test_unformattable_property_substitute();
-
-            string template = "Hello [Name] ,live in [Address]";
-            ParseTokenHelper parseTokenHelper = new ParseTokenHelper();
-            var res = parseTokenHelper.ParseTemplate(template);
-            foreach(var item in res)
+            //Console.WriteLine("All tests passed successfully!");
+            string template = @"[with Contact]Hello [FirstName] from [with Organisation][Name] in [City][/with][/with], create at [CreationTime ""yyyy年MM月dd日 HH:mm:ss""]";
+            TemplateEngine templateEngine = new TemplateEngine();
+            templateEngine.Parser(template);
+            foreach (var item in templateEngine.Tokens)
             {
-                Console.WriteLine(item);
+                Console.WriteLine($"{item.Text} -- {item.Kind}");
             }
-            
-            Console.WriteLine("All tests passed successfully!");
+            templateEngine.SetValue("FirstName", "Jason");
+            templateEngine.SetValue("Name", "CDIG");
+            templateEngine.SetValue("City", "Dalian");
+            templateEngine.SetValue("CreationTime", new DateTime(2012, 4, 3, 16, 30, 24));
+            var res = templateEngine.Process();
+            Console.WriteLine(res);
+            Console.WriteLine("=============================================");
+
             Console.ReadKey();
 
             return 0;

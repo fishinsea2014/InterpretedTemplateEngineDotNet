@@ -47,15 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ParseMode.cs" />
-    <Compile Include="Helpers\ParseTokenHelper.cs" />
     <Compile Include="ITemplateEngine.cs" />
+    <Compile Include="ParserHelpers\IReplacementEngine.cs" />
+    <Compile Include="ParserHelpers\LexerMode.cs" />
+    <Compile Include="ParserHelpers\TemplateEngine.cs" />
+    <Compile Include="ParserHelpers\Token.cs" />
+    <Compile Include="ParserHelpers\TokenKind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateEngineImpl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

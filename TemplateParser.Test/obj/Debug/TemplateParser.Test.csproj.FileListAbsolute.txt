@@ -8,3 +8,13 @@ D:\0_Job_tasks\TemplateParser.Test\obj\Debug\TemplateParser.Test.csproj.CoreComp
 D:\0_Job_tasks\TemplateParser.Test\obj\Debug\TemplateParser.Test.csproj.CopyComplete
 D:\0_Job_tasks\TemplateParser.Test\obj\Debug\TemplateParser.Test.exe
 D:\0_Job_tasks\TemplateParser.Test\obj\Debug\TemplateParser.Test.pdb
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\obj\Debug\TemplateParser.Test.csprojAssemblyReference.cache
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\obj\Debug\TemplateParser.Test.csproj.CoreCompileInputs.cache
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\obj\Debug\TemplateParser.Test.exe
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\obj\Debug\TemplateParser.Test.pdb
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\bin\Debug\TemplateParser.Test.exe
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\bin\Debug\TemplateParser.Test.pdb
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\bin\Debug\TemplateParser.dll
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\bin\Debug\TemplateParser.pdb
+D:\my_projects\InterpretedTemplateEngineDotNet\TemplateParser.Test\obj\Debug\TemplateParser.Test.csproj.CopyComplete
