@@ -21,7 +21,7 @@ namespace TemplateParser {
             }
             templateEngine.ConvertDataSourceToDict(dataSource);
 
-            return "Hello John";
+            return templateEngine.Process();
         }
     }
 }

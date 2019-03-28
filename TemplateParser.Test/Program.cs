@@ -53,7 +53,8 @@ namespace TemplateParser.Test {
                     }
                 }
             };
-            testEngine.Apply(template, dataSource);
+            string parsedString = testEngine.Apply(template, dataSource);
+            Console.WriteLine(parsedString);
             #endregion
 
             //string s = "with Content";

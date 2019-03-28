@@ -22,7 +22,7 @@ namespace TemplateParser
         private int _savedColumn;
         private int _savedLine;
         private int _savedPosition;
-        private string _curParent;
+        private string _curParent=String.Empty;
 
         private string _templateString;
 
@@ -209,7 +209,7 @@ namespace TemplateParser
                     if (text.StartsWith("with"))
                     {
                         string tempText = text.Split(' ')[1].Trim();
-                        this._curParent = this._curParent==""? tempText: this._curParent+"."+tempText;
+                        this._curParent = this._curParent==String.Empty? tempText : this._curParent+"."+tempText;
                     }else if (text.StartsWith("/with"))
                     {
                         //string tempText = _curParent;
@@ -217,8 +217,8 @@ namespace TemplateParser
                         var newArr = tempArr.Take(tempArr.Length - 1);
                         _curParent = tempArr.Length==1? String.Empty:String.Join(".",newArr);
                     }
-
-                    return this._CreateToken(TokenKind.Label, text.Trim(),_curParent);
+                    string tokenName = _curParent == String.Empty ? text.Trim() : _curParent + "." + text;
+                    return this._CreateToken(TokenKind.Label, tokenName,_curParent);
 
                 case LexerMode.FormatString:
                     string cleanedText = text.Trim().TrimEnd('"');
