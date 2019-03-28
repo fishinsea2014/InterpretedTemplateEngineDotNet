@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TemplateParser
@@ -21,6 +22,7 @@ namespace TemplateParser
         private int _savedColumn;
         private int _savedLine;
         private int _savedPosition;
+        private string _curParent;
 
         private string _templateString;
 
@@ -116,6 +118,7 @@ namespace TemplateParser
 
         }
 
+        
         public string Process()
         {
             //throw new System.NotImplementedException();
@@ -203,7 +206,19 @@ namespace TemplateParser
             switch (this._currentMode)
             {
                 case LexerMode.Label:
-                    return this._CreateToken(TokenKind.Label, text.Trim(),"");
+                    if (text.StartsWith("with"))
+                    {
+                        string tempText = text.Split(' ')[1].Trim();
+                        this._curParent = this._curParent==""? tempText: this._curParent+"."+tempText;
+                    }else if (text.StartsWith("/with"))
+                    {
+                        //string tempText = _curParent;
+                        var tempArr = _curParent.Split('.');
+                        var newArr = tempArr.Take(tempArr.Length - 1);
+                        _curParent = tempArr.Length==1? String.Empty:String.Join(".",newArr);
+                    }
+
+                    return this._CreateToken(TokenKind.Label, text.Trim(),_curParent);
 
                 case LexerMode.FormatString:
                     string cleanedText = text.Trim().TrimEnd('"');
@@ -228,5 +243,35 @@ namespace TemplateParser
             this._savedColumn = this._column;
             this._savedPosition = this._position;
         }
+
+
+        #region Convert the datasource to the dictionary of "_variables" 
+        public void ConvertDataSourceToDict(object dataSource)
+        {
+            parseObj(dataSource, "");
+        }
+
+        private void parseObj(object obj, string parentName)
+        {
+
+            Type objType = obj.GetType();
+            foreach (var prop in objType.GetProperties())
+            {
+                string name = parentName == "" ? prop.Name : parentName + "." + prop.Name;
+
+                if (prop.GetValue(obj, null).GetType().ToString().Contains("AnonymousType"))
+                {
+                    parseObj(prop.GetValue(obj, null), name);
+                    continue;
+                }
+                _variables[name] = prop.GetValue(obj, null);
+                Console.WriteLine(name);
+                Console.WriteLine(prop.GetValue(obj, null));
+                Console.WriteLine("====");
+            }
+
+        }
+        #endregion
+
     }
 }

@@ -13,6 +13,8 @@ namespace TemplateParser
 
         void SetValue(string key, object value);
 
+        void ConvertDataSourceToDict(object dataSource);
+
         string Process();
     }
 }

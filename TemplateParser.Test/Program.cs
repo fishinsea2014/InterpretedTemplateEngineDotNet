@@ -18,20 +18,51 @@ namespace TemplateParser.Test {
             //test.Test_formatted_date_property_substitute();
             //test.Test_unformattable_property_substitute();
             //Console.WriteLine("All tests passed successfully!");
-            string template = @"[with Contact]Hello [FirstName] from [with Organisation][Name] in [City][/with][/with], create at [CreationTime ""yyyy年MM月dd日 HH:mm:ss""]";
-            TemplateEngine templateEngine = new TemplateEngine();
-            templateEngine.Parser(template);
-            foreach (var item in templateEngine.Tokens)
+
+
+            #region Jason's first step test
+            //string template = @"[with Contact]Hello [FirstName] from [with Organisation][Name] in [City][/with][/with], create at [CreationTime ""yyyy年MM月dd日 HH:mm:ss""]";
+            //TemplateEngine templateEngine = new TemplateEngine();
+            //templateEngine.Parser(template);
+            //foreach (var item in templateEngine.Tokens)
+            //{
+            //    Console.WriteLine($"{item.Text} -- {item.Kind}--{item.Parent}");
+            //}
+            //templateEngine.SetValue("FirstName", "Jason");
+            //templateEngine.SetValue("Name", "CDIG");
+            //templateEngine.SetValue("City", "Dalian");
+            //templateEngine.SetValue("CreationTime", new DateTime(2012, 4, 3, 16, 30, 24));
+            //var res = templateEngine.Process();
+            //Console.WriteLine(res);
+            //Console.WriteLine("=============================================");
+            #endregion
+
+            #region Jason's second step test
+            string template = @"[with Contact]Hello [FirstName] from [with Organisation][Name] in [City][/with][/with]";
+            TemplateEngineImpl testEngine = new TemplateEngineImpl();
+            var dataSource = new
             {
-                Console.WriteLine($"{item.Text} -- {item.Kind}");
-            }
-            templateEngine.SetValue("FirstName", "Jason");
-            templateEngine.SetValue("Name", "CDIG");
-            templateEngine.SetValue("City", "Dalian");
-            templateEngine.SetValue("CreationTime", new DateTime(2012, 4, 3, 16, 30, 24));
-            var res = templateEngine.Process();
-            Console.WriteLine(res);
-            Console.WriteLine("=============================================");
+                Contact = new
+                {
+                    FirstName = "John",
+                    LastName = "Smith",
+                    Organisation = new
+                    {
+                        Name = "Acme Ltd",
+                        City = "Auckland"
+                    }
+                }
+            };
+            testEngine.Apply(template, dataSource);
+            #endregion
+
+            //string s = "with Content";
+            //bool t=s.StartsWith("with");
+            ////string ss = s.Split(' ')[1];
+            //string s = "a11a";
+            //var t = s.Split('.');
+            //var tt = t.Take(t.Length - 1);
+            //string res = String.Join(".", tt);
 
             Console.ReadKey();
 
