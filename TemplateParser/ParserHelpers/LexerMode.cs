@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 
 namespace TemplateParser
 {
-    public enum LexerMode
+    /// <summary>
+    /// Identify the types of State Machine
+    /// </summary>
+    public enum LexerState
     {
         /// <summary>
-        /// Text
+        /// Text: current state is a general text
         /// </summary>
         Text = 0,
-
         /// <summary>
-        /// Tokens
+        /// Tokens: Current state is a token
         /// </summary>
         Label = 1,
 
-
         /// <summary>
-        /// Formating string
+        /// Format string: Current state is a format string
         /// </summary>
         FormatString =2
 

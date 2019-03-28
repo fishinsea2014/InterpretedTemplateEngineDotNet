@@ -6,23 +6,34 @@ using System.Threading.Tasks;
 
 namespace TemplateParser
 {
-    public enum TokenKind
+    /// <summary>
+    /// Identify the type of each token stored in the list
+    /// </summary>
+    public enum TokenType
     {
-        None=0,
-
+       
+        /// <summary>
+        /// Left square bracket
+        /// </summary>
         LeftBracket =1,
 
+        /// <summary>
+        /// Right square bracket
+        /// </summary>
         RightBracket =2,
 
         /// <summary>
         /// General text
         /// </summary>
         Text = 3,
-        
-        Label = 4,
+
+        /// <summary>
+        /// Token
+        /// </summary>
+        Token = 4,
         
         /// <summary>
-        /// Formate string preamble
+        /// Formate string preamble, which is '"'
         /// </summary>
         FormatStringPreamble = 5,
 

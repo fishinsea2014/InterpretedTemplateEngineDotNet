@@ -13,7 +13,7 @@ namespace TemplateParser {
         public string Apply(string template, object dataSource) {
             //TODO: Write your implementation here that passes all tests in TemplateParser.Test project            
             //throw new NotImplementedException();
-            TemplateEngine templateEngine = new TemplateEngine();
+            ReplacementEngine templateEngine = new ReplacementEngine();
             templateEngine.Parser(template);
             foreach (var item in templateEngine.Tokens)
             {
@@ -21,7 +21,7 @@ namespace TemplateParser {
             }
             templateEngine.ConvertDataSourceToDict(dataSource);
 
-            return templateEngine.Process();
+            return templateEngine.ProcessTemplate();
         }
     }
 }

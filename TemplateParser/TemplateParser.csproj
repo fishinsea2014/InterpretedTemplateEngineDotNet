@@ -50,9 +50,9 @@
     <Compile Include="ITemplateEngine.cs" />
     <Compile Include="ParserHelpers\IReplacementEngine.cs" />
     <Compile Include="ParserHelpers\LexerMode.cs" />
-    <Compile Include="ParserHelpers\TemplateEngine.cs" />
+    <Compile Include="ParserHelpers\ReplacementEngine.cs" />
     <Compile Include="ParserHelpers\Token.cs" />
-    <Compile Include="ParserHelpers\TokenKind.cs" />
+    <Compile Include="ParserHelpers\TokenType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateEngineImpl.cs" />
   </ItemGroup>

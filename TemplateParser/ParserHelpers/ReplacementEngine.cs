@@ -5,17 +5,20 @@ using System.Text;
 
 namespace TemplateParser
 {
-    public sealed class TemplateEngine : IReplacementEngine
+    /// <summary>
+    /// A simple engine of replacement template
+    /// </summary>
+    public sealed class ReplacementEngine : IReplacementEngine
     {
-        private const char _LEFT_BACKET = '[';
-        private const char _RIGHT_BACKET = ']';
+        private const char _LEFT_BRACKET = '[';
+        private const char _RIGHT_BRACKET = ']';
         private const char _FORMAT_STRING_PREAMBLE = '"';
 
-        private readonly Stack<LexerMode> _lexerModes = new Stack<LexerMode>();
+        private readonly Stack<LexerState> _lexerModes = new Stack<LexerState>();
         private readonly List<Token> _tokens = new List<Token>();
         private readonly Dictionary<string, object> _variables = new Dictionary<string, object>();
         private int _column;
-        private LexerMode _currentMode;
+        private LexerState _currentState;
         private int _line;
         private int _position;
 
@@ -27,13 +30,23 @@ namespace TemplateParser
         private string _templateString;
 
 
-        public TemplateEngine()
+        public ReplacementEngine()
         {
         }
 
+        /// <summary>
+        /// Get the list of tokens
+        /// </summary>
         public List<Token> Tokens { get { return new List<Token>(this._tokens); } }
 
         #region Member of ITemplateEngine
+
+        /// <summary>
+        /// Introduce the methodology of state machine
+        /// Read characters one by one, determine the status of the current characters
+        /// then handle it accordingly
+        /// </summary>
+        /// <param name="templateString">Template string</param>
         public void Parser(string templateString)
         {
             if (string.IsNullOrEmpty(templateString)) return;
@@ -42,7 +55,7 @@ namespace TemplateParser
             this._column = 1;
             this._position = 0;
             this._savedPosition = 0;
-            this._currentMode = LexerMode.Text;
+            this._currentState = LexerState.Text;
             this._tokens.Clear();
             this._lexerModes.Clear();
 
@@ -52,47 +65,48 @@ namespace TemplateParser
 
             for (var index=0;index < templateStringLength; index++)
             {
-                var cur = templateString[index];
+                var curChar = templateString[index];
                 this._position++;
                 this._column++;
 
-                switch (cur)
+                switch (curChar)
                 {
-                    case _LEFT_BACKET:
-                        if (this._currentMode == LexerMode.Label) continue;
+                    case _LEFT_BRACKET:
+                        if (this._currentState == LexerState.Label) continue;
 
-                        //Handle the token
+                        //Handle the current char in token mode
                         this._position--;
-                        this._EnterMode(LexerMode.Label);
+                        this._EnterMode(LexerState.Label);
                         this._position++;
-                        this._tokens.Add(this._CreateToken(TokenKind.LeftBracket, "[",""));
+                        this._tokens.Add(this._CreateToken(TokenType.LeftBracket, "[",""));
                         this._Save();
                         break;
 
-                    case _RIGHT_BACKET:
-                        this._position--;
-
-                        //Handle the end of a token
-                        if (this._currentMode == LexerMode.FormatString) this._LeaveMode();
+                    case _RIGHT_BRACKET:
+                        
+                        //Activities when leaving a token
+                        this._position--;                        
+                        if (this._currentState == LexerState.FormatString) this._LeaveMode();
                         this._LeaveMode();
                         this._position++;
-                        this._tokens.Add(this._CreateToken(TokenKind.RightBracket, "]",""));
+                        this._tokens.Add(this._CreateToken(TokenType.RightBracket, "]",""));
                         this._Save();
                         break;
 
                     case _FORMAT_STRING_PREAMBLE:
-                        if (this._currentMode == LexerMode.FormatString)
+                        //Start a format string mode only when the current state is Label
+                        if (this._currentState == LexerState.FormatString)
                         {
                             continue;
                         }                        
 
-                        if(this._currentMode == LexerMode.Label)
+                        if(this._currentState == LexerState.Label)
                         {
                             this._position--;
-                            this._EnterMode(LexerMode.FormatString);
+                            this._EnterMode(LexerState.FormatString);
                             this._position++;
 
-                            this._tokens.Add(this._CreateToken(TokenKind.FormatStringPreamble, @"""",""));
+                            this._tokens.Add(this._CreateToken(TokenType.FormatStringPreamble, @"""",""));
 
                             this._Save();
                         }
@@ -112,14 +126,8 @@ namespace TemplateParser
 
         }
 
-        public void SetValue(string key, object value)
-        {
-            this._variables[key] = value;
-
-        }
-
-        
-        public string Process()
+       
+        public string ProcessTemplate()
         {
             //throw new System.NotImplementedException();
             var result = new StringBuilder();
@@ -128,12 +136,12 @@ namespace TemplateParser
                 var token = this._tokens[index];
                 switch (token.Kind)
                 {
-                    case TokenKind.Label:
+                    case TokenType.Token:
                         string value;
                         if (index < this._tokens.Count - 2)
                         {
                             var nextToken = this._tokens[index + 2];
-                            if (nextToken.Kind == TokenKind.FormatString)
+                            if (nextToken.Kind == TokenType.FormatString)
                             {
                                 var obj = this._variables[token.Text] as IFormattable;
                                 value = obj == null ? this._variables[token.Text].ToString() : obj.ToString(nextToken.Text, null);
@@ -152,7 +160,7 @@ namespace TemplateParser
                         }
                         result.Append(value);
                         break;
-                    case TokenKind.Text:
+                    case TokenType.Text:
                         result.Append(token.Text);
                         break;
                 }
@@ -162,7 +170,7 @@ namespace TemplateParser
 
         
         #endregion
-        private void _EnterMode(LexerMode mode)
+        private void _EnterMode(LexerState mode)
         {
             //throw new NotImplementedException();
             if (this._position > 0)
@@ -177,8 +185,8 @@ namespace TemplateParser
                 }
             }
 
-            this._lexerModes.Push(this._currentMode);
-            this._currentMode = mode;
+            this._lexerModes.Push(this._currentState);
+            this._currentState = mode;
 
         }
 
@@ -197,15 +205,15 @@ namespace TemplateParser
                 }
             }
 
-            this._currentMode = this._lexerModes.Pop();
+            this._currentState = this._lexerModes.Pop();
         }
 
         private Token _CreateToken(string text)
         {
             //throw new NotImplementedException();
-            switch (this._currentMode)
+            switch (this._currentState)
             {
-                case LexerMode.Label:
+                case LexerState.Label:
                     if (text.StartsWith("with"))
                     {
                         string tempText = text.Split(' ')[1].Trim();
@@ -218,21 +226,21 @@ namespace TemplateParser
                         _curParent = tempArr.Length==1? String.Empty:String.Join(".",newArr);
                     }
                     string tokenName = _curParent == String.Empty ? text.Trim() : _curParent + "." + text;
-                    return this._CreateToken(TokenKind.Label, tokenName,_curParent);
+                    return this._CreateToken(TokenType.Token, tokenName,_curParent);
 
-                case LexerMode.FormatString:
+                case LexerState.FormatString:
                     string cleanedText = text.Trim().TrimEnd('"');
-                    return this._CreateToken(TokenKind.FormatString, cleanedText ,"");
+                    return this._CreateToken(TokenType.FormatString, cleanedText ,"");
 
                 default:
-                    return this._CreateToken(TokenKind.Text, text, "");
+                    return this._CreateToken(TokenType.Text, text, "");
             }
         }
 
-        private Token _CreateToken(TokenKind kind, string text, string parent)
+        private Token _CreateToken(TokenType kind, string text, string parent)
         {
             //throw new NotImplementedException();
-            if ((kind == TokenKind.Label || kind == TokenKind.FormatString) && string.IsNullOrEmpty(text))
+            if ((kind == TokenType.Token || kind == TokenType.FormatString) && string.IsNullOrEmpty(text))
                 return null;
             return new Token(kind, text ?? String.Empty, this._savedLine, this._savedColumn, parent ?? String.Empty);
         }
@@ -245,12 +253,17 @@ namespace TemplateParser
         }
 
 
-        #region Convert the datasource to the dictionary of "_variables" 
+        #region Convert the datasource to the dictionary of subsititution keyworkds, whihch is the "_variables" 
         public void ConvertDataSourceToDict(object dataSource)
         {
             parseObj(dataSource, "");
         }
 
+        /// <summary>
+        /// Utilise relfection to find all the properties in the datasource
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="parentName"></param>
         private void parseObj(object obj, string parentName)
         {
 
