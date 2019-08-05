@@ -56,7 +56,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ParseTokenHelperTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="TemplateEngineImplTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
